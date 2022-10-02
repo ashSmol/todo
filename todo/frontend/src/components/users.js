@@ -25,24 +25,31 @@ const UserItem = ({ user }) => {
 const UserList = ({ users }) => {
     return (
         <table>
-            <th>
-                User ID
-            </th>
-            <th>
-                User Name
-            </th>
-            <th>
-                User First Name
-            </th>
-            <th>
-                User Last Name
-            </th>
-            <th>
-                User EMAIL
-            </th>
-            {users.map((user_) => <UserItem user={user_} />)}
+            <thead>
+                <tr>
+                    <th>
+                        User ID
+                    </th>
+                    <th>
+                        User Name
+                    </th>
+                    <th>
+                        User First Name
+                    </th>
+                    <th>
+                        User Last Name
+                    </th>
+                    <th>
+                        User EMAIL
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {users.map((user_) => <UserItem user={user_} />)}
+            </tbody>
+
         </table>
     )
 }
 
-export default UserList
+export default UserList;
