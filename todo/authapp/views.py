@@ -1,11 +1,11 @@
-from django.shortcuts import render
-from rest_framework.viewsets import ModelViewSet
-
+from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from .serializers import UserModelSerializer
-# Create your views here.
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
+from rest_framework.viewsets import GenericViewSet
 from authapp.models import User
 
 
-class UserModelViewSet(ModelViewSet):
+class UserModelViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserModelSerializer
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
