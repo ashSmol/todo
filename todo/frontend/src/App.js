@@ -13,33 +13,6 @@ import {
   Link
 } from 'react-router-dom';
 
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error) {
-    // Update state so the next render will show the fallback UI.
-    return { hasError: true };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    // You can also log the error to an error reporting service
-    console.log(error);
-    console.log(errorInfo)
-  }
-
-  render() {
-    if (this.state.hasError) {
-      // You can render any custom fallback UI
-      return <h1>Something went wrong.</h1>;
-    }
-
-    return this.props.children;
-  }
-}
-
 class App extends React.Component {
   constructor(props) {
     super(props)
@@ -52,33 +25,52 @@ class App extends React.Component {
   componentDidMount() {
     axios.get('http://127.0.0.1:8000/users/')
       .then(response => {
-        const users = response.data
-        this.setState(
-          {
-            'users': users,
-          }
-        )
-      }).catch(error => console.log(error))
+        const users = response.data;
+        if (users) {
+          this.setState(
+            {
+              'users': users,
+            }
+          )
+        }
+      }).catch(error => console.log(error));
 
     axios.get('http://127.0.0.1:8000/todos/')
       .then(response => {
         const todos = response.data
-        this.setState(
-          {
-            'todos': todos,
-          }
-        )
-      }).catch(error => console.log(error))
+        if (todos) {
+          this.setState(
+            {
+              'todos': todos,
+            }
+          )
+        }
+        else {
+          this.setState(
+            {
+              'todos': [],
+            })
+        }
+      }).catch(error => console.log(error));
 
     axios.get('http://127.0.0.1:8000/projects/')
       .then(response => {
         const projects = response.data
-        this.setState(
-          {
-            'projects': projects,
-          }
-        )
-      }).catch(error => console.log(error))
+        if (projects) {
+          this.setState(
+            {
+              'projects': projects,
+            }
+          )
+        }
+        else {
+          this.setState(
+            {
+              'projects': [],
+            })
+        }
+
+      }).catch(error => console.log(error));
 
   }
 
@@ -91,10 +83,10 @@ class App extends React.Component {
           <nav>
             <ul>
               <li>
-                <Link to="/">Todos</Link>
+                <Link to="/">Users</Link>
               </li>
               <li>
-                <Link to="/users">Users</Link>
+                <Link to="/todos">Todos</Link>
               </li>
               <li>
                 <Link to="/projects">Projects</Link>
@@ -102,15 +94,15 @@ class App extends React.Component {
             </ul>
           </nav>
           <Routes>
-            
-              <Route exact path='/' element={ <ErrorBoundary> <TodosList todos={this.state.todos} /> </ErrorBoundary>} />
-            
-            
-              <Route exact path='/projects' element={<ErrorBoundary><ProjectsList projects={this.state.projects} /></ErrorBoundary>} />
-            
-            
-              <Route exact path='/users' element={<ErrorBoundary><UserList users={this.state.users} /></ErrorBoundary>} />
-            
+
+            <Route exact path='/' element={<UserList users={this.state.users} />} />
+
+
+            <Route exact path='/projects' element={<ProjectsList projects={this.state.projects} />} />
+
+
+            <Route exact path='/todos' element={<TodosList todos={this.state.todos} />} />
+
           </Routes>
         </BrowserRouter>
         <Footer />

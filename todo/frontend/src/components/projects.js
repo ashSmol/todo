@@ -40,8 +40,7 @@ const ProjectsList = ({ projects }) => {
             </thead>
             {console.log(projects)}
             <tbody>
-                {/* {projects.map((project_) => <ProjectItem project={project_} />)} */}
-                {console.log(projects)}
+                {projects.map((project_) => <ProjectItem project={project_} />)}
             </tbody>
 
         </table>

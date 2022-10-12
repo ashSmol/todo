@@ -57,9 +57,7 @@ const TodosList = ({ todos }) => {
                 </tr>
             </thead>
             <tbody>
-                console.log(todos)
                 {todos.map((todo_) => <TodoItem todo={todo_} />)}
-
             </tbody>
 
         </table>
