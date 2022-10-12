@@ -18,7 +18,7 @@ const ProjectItem = ({ project }) => {
 
 const ProjectsList = ({ projects }) => {
     return (
-        <table>
+        <table className='table'>
             <thead>
                 <tr>
                     <th>
@@ -29,12 +29,6 @@ const ProjectsList = ({ projects }) => {
                     </th>
                     <th>
                         Involved Users
-                    </th>
-                    <th>
-                        User Last Name
-                    </th>
-                    <th>
-                        User EMAIL
                     </th>
                 </tr>
             </thead>

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 const style =  {
     top:'0',
@@ -15,9 +16,9 @@ const style =  {
 const Header = () => {
     return (
         <div style={style}>
-            <div>Menu Item 1</div>
-            <div>Menu Item 2</div>
-            <div>Menu Item 3</div>
+            <div><Link to="/">Users</Link></div>
+            <div><Link to="/todos">Todos</Link></div>
+            <div><Link to="/projects">Projects</Link></div>
         </div>
     )
 }

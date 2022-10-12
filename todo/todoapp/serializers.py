@@ -1,11 +1,10 @@
-from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField, StringRelatedField
+from rest_framework.serializers import ModelSerializer, StringRelatedField
 
-from authapp.serializers import UserModelSerializer
 from todoapp.models import Project, Todo
 
 
 class ProjectModelSerializer(ModelSerializer):
-    users = UserModelSerializer(many=True)
+    users = StringRelatedField(many=True)
 
     class Meta:
         model = Project
@@ -13,7 +12,7 @@ class ProjectModelSerializer(ModelSerializer):
 
 
 class TodoModelSerializer(ModelSerializer):
-    project = PrimaryKeyRelatedField(read_only=True)
+    project = StringRelatedField(read_only=True)
     user = StringRelatedField(read_only=True)
 
     class Meta:

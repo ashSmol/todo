@@ -78,21 +78,10 @@ class App extends React.Component {
     return (
       <div>
 
-        <Header />
+
         <BrowserRouter>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Users</Link>
-              </li>
-              <li>
-                <Link to="/todos">Todos</Link>
-              </li>
-              <li>
-                <Link to="/projects">Projects</Link>
-              </li>
-            </ul>
-          </nav>
+        <Header />
+
           <Routes>
 
             <Route exact path='/' element={<UserList users={this.state.users} />} />

@@ -30,7 +30,7 @@ const TodoItem = ({ todo }) => {
 
 const TodosList = ({ todos }) => {
     return (
-        <table>
+        <table className='table'>
             <thead>
                 <tr>
                     <th>
