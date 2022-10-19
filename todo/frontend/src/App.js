@@ -12,6 +12,7 @@ import {
   Route,
   Link
 } from 'react-router-dom';
+import LoginForm from './components/LoginForm';
 
 class App extends React.Component {
   constructor(props) {
@@ -20,9 +21,11 @@ class App extends React.Component {
       'users': [],
       'todos': [],
       'projects': [],
+      'token': '',
     }
   }
-  componentDidMount() {
+
+  loadData() {
     axios.get('http://127.0.0.1:8000/users/')
       .then(response => {
         const users = response.data;
@@ -74,13 +77,27 @@ class App extends React.Component {
 
   }
 
+  setToken(token){
+    console.log(token)
+  }
+
+  getTokenFromApi(username, password) {
+    axios.post('http://127.0.0.1:8000/api-token-auth/', { 'username': username, 'password': password }).
+      then(response => this.setToken(response.data['token'])).
+      catch(error => alert("Не удалось получить токен авторизации"));
+  }
+
+  componentDidMount() {
+    this.loadData()
+  }
+
   render() {
     return (
       <div>
 
 
         <BrowserRouter>
-        <Header />
+          <Header />
 
           <Routes>
 
@@ -91,6 +108,7 @@ class App extends React.Component {
 
 
             <Route exact path='/todos' element={<TodosList todos={this.state.todos} />} />
+            <Route exact path='/login' element={<LoginForm getTokenFromApi={(username, password) => this.getTokenFromApi(username, password) } />} />
 
           </Routes>
         </BrowserRouter>
