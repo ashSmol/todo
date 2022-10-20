@@ -13,6 +13,8 @@ import {
   Link
 } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
+import Cookies from 'universal-cookie';
+
 
 class App extends React.Component {
   constructor(props) {
@@ -26,7 +28,9 @@ class App extends React.Component {
   }
 
   loadData() {
-    axios.get('http://127.0.0.1:8000/users/')
+    const headers = this.getHeaders();
+
+    axios.get('http://127.0.0.1:8000/users/', { headers })
       .then(response => {
         const users = response.data;
         if (users) {
@@ -38,7 +42,7 @@ class App extends React.Component {
         }
       }).catch(error => console.log(error));
 
-    axios.get('http://127.0.0.1:8000/todos/')
+    axios.get('http://127.0.0.1:8000/todos/', { headers })
       .then(response => {
         const todos = response.data
         if (todos) {
@@ -56,7 +60,7 @@ class App extends React.Component {
         }
       }).catch(error => console.log(error));
 
-    axios.get('http://127.0.0.1:8000/projects/')
+    axios.get('http://127.0.0.1:8000/projects/', { headers })
       .then(response => {
         const projects = response.data
         if (projects) {
@@ -77,18 +81,44 @@ class App extends React.Component {
 
   }
 
-  setToken(token){
-    console.log(token)
+  setToken(token) {
+    const cookies = new Cookies()
+    cookies.set('token', token)
+    this.setState({ 'token': token }, () => this.loadData())
+  }
+
+  isAuthenticated() {
+    return this.state.token != ''
+  }
+
+  logout() {
+    this.set_token('')
+  }
+
+  getHeaders() {
+    let headers = {
+      'Content-Type': 'application/json'
+    }
+    if (this.isAuthenticated()) {
+      headers['Authorization'] = 'Token ' + this.state.token
+    }
+    return headers
   }
 
   getTokenFromApi(username, password) {
     axios.post('http://127.0.0.1:8000/api-token-auth/', { 'username': username, 'password': password }).
       then(response => this.setToken(response.data['token'])).
-      catch(error => alert("Не удалось получить токен авторизации"));
+      catch(error => alert("Не удалось получить токен авторизации", error));
+  }
+
+  getTokenFromCookies() {
+    const cookies = new Cookies();
+    const token = cookies.get('token');
+    this.setState({ 'token': token }, ()=> this.loadData());
   }
 
   componentDidMount() {
-    this.loadData()
+    this.getTokenFromCookies();
   }
 
   render() {
@@ -108,7 +138,7 @@ class App extends React.Component {
 
 
             <Route exact path='/todos' element={<TodosList todos={this.state.todos} />} />
-            <Route exact path='/login' element={<LoginForm getTokenFromApi={(username, password) => this.getTokenFromApi(username, password) } />} />
+            <Route exact path='/login' element={<LoginForm getTokenFromApi={(username, password) => this.getTokenFromApi(username, password)} />} />
 
           </Routes>
         </BrowserRouter>
