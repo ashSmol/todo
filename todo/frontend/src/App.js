@@ -81,6 +81,14 @@ class App extends React.Component {
 
   }
 
+  clearAllData() {
+    this.setState({
+      'users': [],
+      'todos': [],
+      'projects': [],
+    })
+  }
+
   setToken(token) {
     const cookies = new Cookies()
     cookies.set('token', token)
@@ -92,7 +100,8 @@ class App extends React.Component {
   }
 
   logout() {
-    this.set_token('')
+    this.setToken('');
+    this.clearAllData();
   }
 
   getHeaders() {
@@ -114,7 +123,7 @@ class App extends React.Component {
   getTokenFromCookies() {
     const cookies = new Cookies();
     const token = cookies.get('token');
-    this.setState({ 'token': token }, ()=> this.loadData());
+    this.setState({ 'token': token }, () => this.loadData());
   }
 
   componentDidMount() {
@@ -127,7 +136,7 @@ class App extends React.Component {
 
 
         <BrowserRouter>
-          <Header />
+          <Header isAuthenticated={() => this.isAuthenticated()} logout={() => this.logout()} />
 
           <Routes>
 
